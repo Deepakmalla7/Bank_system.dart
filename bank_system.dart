@@ -215,3 +215,21 @@ void main() {
   bank.addAccount(s1);
   bank.addAccount(c1);
   bank.addAccount(p1);
+
+  // Test operations
+  s1.withdraw(200);
+  s1.deposit(100);
+  s1.applyInterest();
+
+  c1.withdraw(400); // causes overdraft
+  c1.deposit(200);
+
+  p1.withdraw(4000);  
+  p1.applyInterest();
+
+  // Transfer between accounts
+  bank.transfer("S001", "C001", 100);
+
+  // Show all accounts
+  bank.showAllAccounts();
+}
