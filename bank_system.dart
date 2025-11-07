@@ -201,3 +201,17 @@ class Bank {
   }
 }
 
+
+void main() {
+  // Create bank
+  Bank bank = Bank();
+
+  // Create accounts
+  SavingsAccount s1 = SavingsAccount("S001", "Alice", 1000);
+  CheckingAccount c1 = CheckingAccount("C001", "Bob", 300);
+  PremiumAccount p1 = PremiumAccount("P001", "Charlie", 15000);
+
+  // Add to bank
+  bank.addAccount(s1);
+  bank.addAccount(c1);
+  bank.addAccount(p1);
