@@ -89,3 +89,115 @@ class SavingsAccount extends BankAccount implements InterestBearing {
   }
 }
 
+
+class CheckingAccount extends BankAccount {
+  CheckingAccount(String accNo, String name, double balance)
+      : super(accNo, name, balance);
+
+  @override
+  void deposit(double amount) {
+    if (amount > 0) {
+      updateBalance(balance + amount);
+      print("Deposited \$${amount} to Checking Account. New Balance: \$${balance}");
+    } else {
+      print("Deposit amount must be positive!");
+    }
+  }
+
+  @override
+  void withdraw(double amount) {
+    if (amount > 0) {
+      updateBalance(balance - amount);
+      if (balance < 0) {
+        updateBalance(balance - 35); // overdraft fee
+        print("Overdraft fee of \$35 applied!");
+      }
+      print("Withdrew \$${amount} from Checking Account. New Balance: \$${balance}");
+    } else {
+      print("Invalid withdrawal amount!");
+    }
+  }
+}
+
+
+class PremiumAccount extends BankAccount implements InterestBearing {
+  PremiumAccount(String accNo, String name, double balance)
+      : super(accNo, name, balance);
+
+  @override
+  void deposit(double amount) {
+    if (amount > 0) {
+      updateBalance(balance + amount);
+      print("Deposited \$${amount} to Premium Account. New Balance: \$${balance}");
+    } else {
+      print("Deposit amount must be positive!");
+    }
+  }
+
+  @override
+  void withdraw(double amount) {
+    if (balance - amount < 10000) {
+      print("Cannot withdraw. Must maintain \$10,000 minimum balance.");
+    } else {
+      updateBalance(balance - amount);
+      print("Withdrew \$${amount} from Premium Account. New Balance: \$${balance}");
+    }
+  }
+
+  @override
+  double calculateInterest() {
+    return balance * 0.05; // 5%
+  }
+
+  @override
+  void applyInterest() {
+    double interest = calculateInterest();
+    updateBalance(balance + interest);
+    print("Interest \$${interest} added. New Balance: \$${balance}");
+  }
+}
+
+
+class Bank {
+  List<BankAccount> accounts = [];
+
+  // Add account
+  void addAccount(BankAccount account) {
+    accounts.add(account);
+  }
+
+  // Find account by number
+  BankAccount? findAccount(String accNo) {
+    for (var acc in accounts) {
+      if (acc.accountNumber == accNo) {
+        return acc;
+      }
+    }
+    return null;
+  }
+
+  // Transfer money
+  void transfer(String fromNo, String toNo, double amount) {
+    var from = findAccount(fromNo);
+    var to = findAccount(toNo);
+
+    if (from == null || to == null) {
+      print("One of the accounts was not found!");
+      return;
+    }
+
+    from.withdraw(amount);
+    to.deposit(amount);
+    print("Transferred \$${amount} from $fromNo to $toNo.");
+  }
+
+  // Show all accounts
+  void showAllAccounts() {
+    print("\n--- Bank Report ---");
+    for (var acc in accounts) {
+      acc.displayInfo();
+    }
+    print("-------------------\n");
+  }
+}
+
